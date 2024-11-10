@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">ComposeApp</string>
+    <string name="app_main_screen">Main screen</string>
+    <string name="app_navigation_screen">Navigation</string>
+    <string name="app_ssm_screen">SSM</string>
+    <string name="app_basic_screen">Basic</string>
+    <string name="app_conversation_screen">Conversation</string>
+
+    <!--    SSM-->
+    <string name="ssm_main_screen">SSM Main Screen</string>
+    <string name="ssm_connection_screen">Connection screen</string>
+    <string name="ssm_select_os_screen">Select Os screen</string>
+    <string name="ssm_searching_screen">Searching screen</string>
+    <string name="ssm_menu_screen">Menu dialog</string>
+    <string name="ssm_new_activity">New activity</string>
+    <string name="nav_home_screen">Nav home screen</string>
+    <string name="nav_profile_screen">Nav profile screen</string>
+    <string name="nav_login_screen">Nav login screen</string>
+</resources>
