@@ -12,7 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.enableSavedStateHandles
-import com.example.composeapp.theme.ComposeAppTheme
+import com.example.composeapp.common.theme.ComposeAppTheme
 
 class SsmNewActivity : ComponentActivity() {
 

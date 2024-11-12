@@ -15,7 +15,7 @@ class LocalMessageDataSourceImpl : MessageDataSource() {
 
     override fun getListMessages(channelId: String): List<Message> {
         var messages = listOf<Message>()
-        for (i in 10..30) {
+        for (i in 1..20) {
             messages += Message(
                 channelId = i.toString(),
                 content = "Hello $i",
@@ -27,7 +27,7 @@ class LocalMessageDataSourceImpl : MessageDataSource() {
 
     override fun getLatestMessages(channelId: String): List<Message> {
         var messages = listOf<Message>()
-        for (i in 10..30) {
+        for (i in 1..20) {
             messages += Message(
                 channelId = i.toString(),
                 content = "Hello $i",

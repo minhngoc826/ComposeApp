@@ -21,6 +21,9 @@ enum class SubScreen(val titleId: Int) {
 //    Navigation
     NAV_HOME(titleId = R.string.nav_home_screen),
     NAV_PROFILE(titleId = R.string.nav_profile_screen),
-    NAV_LOGIN(titleId = R.string.nav_login_screen)
+    NAV_LOGIN(titleId = R.string.nav_login_screen),
 
+//    Basic
+    BASIC_BASIC(titleId = R.string.basic_basic_screen),
+    BASIC_LAZY_LIST(titleId = R.string.basic_lazy_list_screen),
 }

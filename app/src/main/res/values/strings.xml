@@ -16,4 +16,6 @@
     <string name="nav_home_screen">Nav home screen</string>
     <string name="nav_profile_screen">Nav profile screen</string>
     <string name="nav_login_screen">Nav login screen</string>
+    <string name="basic_basic_screen">Basical screen</string>
+    <string name="basic_lazy_list_screen">Lazy list screen</string>
 </resources>

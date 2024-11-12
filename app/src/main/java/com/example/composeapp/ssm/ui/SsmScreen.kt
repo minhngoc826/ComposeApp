@@ -29,7 +29,7 @@ import com.example.composeapp.ssm.ui.screen.MenuScreen
 import com.example.composeapp.ssm.ui.screen.SearchingScreen
 import com.example.composeapp.ssm.ui.screen.SelectOsScreen
 import com.example.composeapp.ssm.viewmodel.SsmViewModel
-import com.example.composeapp.theme.ComposeAppTheme
+import com.example.composeapp.common.theme.ComposeAppTheme
 
 /* Navigation-Compose
 * 1. NavController:     redirect composable (screen) to destination

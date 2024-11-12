@@ -41,7 +41,7 @@ import com.example.composeapp.common.MyTopAppBar
 import com.example.composeapp.common.SubScreen
 import com.example.composeapp.navigation.profile.ui.NavigationActivity
 import com.example.composeapp.ssm.ui.SsmActivity
-import com.example.composeapp.theme.ComposeAppTheme
+import com.example.composeapp.common.theme.ComposeAppTheme
 
 class MainActivity : ComponentActivity() {
     private val TAG = "MainActivity"

@@ -9,8 +9,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
@@ -23,9 +25,9 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.Send
-import androidx.compose.material3.Divider
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
@@ -37,10 +39,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -54,14 +59,14 @@ import com.example.composeapp.common.MyTopAppBar
 import com.example.composeapp.common.SubScreen
 import com.example.composeapp.conversation.viewmodel.ConversationViewModel
 import com.example.composeapp.conversation.viewmodel.Message
-import com.example.composeapp.theme.ComposeAppTheme
+import com.example.composeapp.common.theme.ComposeAppTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.util.Date
 
 class ConversationActivity : ComponentActivity() {
     companion object {
-        const val TAG = "BasicActivity"
+        const val TAG = "ConversationActivity"
     }
 
     private var messages = listOf<Message>() // empty list
@@ -90,7 +95,8 @@ fun ConversationScreen(
     val curScreen = SubScreen.valueOf(navBackStackEntry?.destination?.route ?: SubScreen.APP_BASIC.name)
     val scope = rememberCoroutineScope()
     val lazyListState = rememberLazyListState()     // State hoisted to the ConversationScreen
-    val messages by conversationViewModel.messages.collectAsState(initial = emptyList())
+    val isKeyboardVisible = WindowInsets.ime.getBottom(LocalDensity.current) > 0 // keyboard show or hide
+    val keyboardController = LocalSoftwareKeyboardController.current
 
     Scaffold(
         topBar = {
@@ -106,7 +112,7 @@ fun ConversationScreen(
         },
         floatingActionButton = {
             JumpToBottom(
-                onClicked = { scope.launch { lazyListState.scrollToItem(0) } }
+                onClicked = { scope.launch { lazyListState.scrollToItem(conversationViewModel.messages.size) } }
             )
         },
         floatingActionButtonPosition = FabPosition.Center,
@@ -116,7 +122,7 @@ fun ConversationScreen(
             .navigationBarsPadding()
             .imePadding()
     ) { innerPadding ->
-        Logger.d(ConversationActivity.TAG, "ConversationScreen: $innerPadding")
+        Logger.d(ConversationActivity.TAG, "ConversationScreen: innerPadding = $innerPadding")
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -137,7 +143,7 @@ fun ConversationScreen(
                     .background(color = Color.LightGray)
                 ,
                 scope = scope,
-                messages = messages,
+                messages = conversationViewModel.messages,
                 lazyListState = lazyListState
             )     // Reuse same state in MessageList
 
@@ -153,12 +159,16 @@ fun ConversationScreen(
                 ,
                 onMessageSent = {  text: String, time: String ->                        // Apply UI logic to lazyListState
                     val newMessage = Message(
-                        channelId = messages.size.toString(),
+                        channelId = (conversationViewModel.messages.size + 1).toString(),
                         content = text,
                         timestamp = time
                     )
+                    conversationViewModel.sendMessage(newMessage)      // Add message to ViewModel's LiveData
+                    if (isKeyboardVisible) {
+                        keyboardController?.hide()
+                    }
 
-                    scope.launch { lazyListState.scrollToItem(0) }
+                    scope.launch { lazyListState.scrollToItem(conversationViewModel.messages.size) }
                 }
             )
         }
@@ -206,7 +216,7 @@ fun MessageItem(message: Message) {
     ) {
         Text(text = "${message.content}", fontSize = 18.sp)
         Text(text = "${message.timestamp}", fontSize = 12.sp)
-        Divider(
+        HorizontalDivider(
             modifier = Modifier.fillMaxWidth(),
             thickness = 1.dp
         )
@@ -225,7 +235,7 @@ fun UserInput(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
-        var text by remember { mutableStateOf("") } // Remember a mutable state variable
+        var text by rememberSaveable { mutableStateOf("") } // Remember a mutable state variable
         TextField(
             value = text,
             onValueChange = { text = it },
@@ -240,6 +250,8 @@ fun UserInput(
             onClick = {
                 val timestamp = Date(System.currentTimeMillis())
                 onMessageSent(text, "" + timestamp.hours + ":" + timestamp.minutes)
+                text = ""
+                // check keyborad show/hide
             }
         ) {
             Icon(imageVector = Icons.Filled.Send, contentDescription = "Send message", tint = androidx.compose.ui.graphics.Color.Blue)

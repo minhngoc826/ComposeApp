@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.composeapp.R
-import com.example.composeapp.theme.ComposeAppTheme
+import com.example.composeapp.common.theme.ComposeAppTheme
 
 @Composable
 fun SearchingScreen() {

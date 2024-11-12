@@ -30,7 +30,7 @@ import com.example.composeapp.navigation.profile.ui.screen.HomeScreen
 import com.example.composeapp.navigation.profile.ui.screen.LoginScreen
 import com.example.composeapp.navigation.profile.ui.screen.ProfileScreen
 import com.example.composeapp.navigation.profile.viewmodel.UserViewModel
-import com.example.composeapp.theme.ComposeAppTheme
+import com.example.composeapp.common.theme.ComposeAppTheme
 
 class NavigationActivity : ComponentActivity() {
     companion object {
