@@ -1,0 +1,167 @@
+Subject: [PATCH] add doc for app architect
+---
+Index: app/src/main/assets/JetpackCompose.txt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/assets/JetpackCompose.txt b/app/src/main/assets/JetpackCompose.txt
+--- a/app/src/main/assets/JetpackCompose.txt	(revision f8ba6b5f84b1b3894b29df3c7b8904048a9dae0a)
++++ b/app/src/main/assets/JetpackCompose.txt	(date 1731581962154)
+@@ -104,7 +104,8 @@
+ 		- reset Effect:
+ 			+ LaunchedEffect, DisposableEffect, produceState: keys changed -> reset
+ 			+ if some key changed but state not changed: 	using rememberUpdatedState for key
+-			
++		
++		
+ 	2.3. Phases:
+ 		- Android View:		data -> 				measure -> 	layout -> 						drawing -> 			UI
+ 		- Compose:			data -> composition -> 				layout (measure + location) -> 	drawing (Canvas) -> UI							
+@@ -124,6 +125,7 @@
+ 			+ Draw:				Canvas(modifier = modifier) { }, Modifier.drawBehind vĂ  Modifier.drawWithContent
+ 			
+ 			+ Optimize:			
++			
+ 	
+ 	2.4. Managing State:
+ 		- Composition: 
+@@ -253,7 +255,9 @@
+ 				- ViewModel: SavedStateHandle.															// https://developer.android.com/topic/libraries/architecture/saving-states
+ 			+ 3. Local storage: db, share preference
+ 			+ 4. SavedStateRegistry:	Activity, Fragment													// https://developer.android.com/topic/libraries/architecture/saving-states?hl=vi#onsaveinstancestate
+-			
++		
++		2.5. Architecting your Compose UI
++			+ 
+ 
+ 4. App Layout
+ 	- Flow Layout:
+Index: app/src/main/assets/3.AppArchitecture.txt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/assets/3.AppArchitecture.txt b/app/src/main/assets/3.AppArchitecture.txt
+--- a/app/src/main/assets/3.AppArchitecture.txt	(revision f8ba6b5f84b1b3894b29df3c7b8904048a9dae0a)
++++ b/app/src/main/assets/3.AppArchitecture.txt	(date 1731689187088)
+@@ -1,3 +1,109 @@
++//////////// PetCare //////////////
++0. Utils
++1. Domain layer
++	- model: data class
++	- DataSource: interface									// Repository
++		- suspend fun
++		
++	- Usecase(DataSource):	// Repository
++		- suspend fun =  DataSource.fun()
++2. Data layer:
++	- Local:
++		- Entity, Dao, Database
++	- Remote:
++		-  Api, Response(Entity)
++		
++	- Repository(Dao, Api) extends DataSource:				// PetJourneyRepositoryImpl: get from Api -> update to local Db = Dao
++		- 
++	- Mapper: convert onject domain layer <-> data layer
++
++3. Presentation layer: UI layer
++	- di
++		- DBModule: 
++			- providerDaos(Database)
++		- RepositoryModule:
++			- binRepository -> using in Usecase
++		- ApiModule:
++			- provideRetrofit()\
++			- provideApis()
++	- ViewModel(Usecase, Usecase):
++		- LiveData, State<T>
++	- UI: 
++		- Activity, Fragment
++		- Compose:
++////////////////////////
++//////////// PetCare //////////////
++////////////////////////
++
++0. Common:
++
++1. Data layer: 
++	- model
++		- Local: 
++			- Entities:	Message, Conversation, User, Like, Icons
++			- DAO:		MessageDao, ...
++			- Database: RoomDb
++		- Remote:
++			- API:		
++			- Response:	
++	- DataSource: [Usecase, DAO]:  LocalDataSourceImpl / RemoteDataSourceImpl
++	- Repository(DataSource)
++	
++2. Domain layer: 	implement(":data")
++	- ViewModel, LiveData
++	- 
++3. UI layer:		implement(":data")		implement(":domain")
++	- Activity / Fragment
++	- Composable
++
++
++
++//////////// SamsungInCallUI //////////////
++0. Common
++1. 
++2. Model / ModelImpl
++	- Model:
++		- model:		interface -> methods
++		- DataSource: 	interface	-> LiveData
++		
++	- ModelImpl:
++		- modelImpl:	decrale variables + override methods +  LiveData
++		- Repository:	extends DataSource
++			- other Repository
++			- get LiveData
++	
++
++3. ViewModel / ViewModelImplement
++	- ViewModel: interface
++		- ViewModelsManager: 	getExecutors
++		- Executor:				get LiveData() / execute action = set LiveData
++			- CommonExecutors:	provider Executor()
++			- 
++		- Flow:					Dependency extends DataSources
++		- ActionCommandUi:
++		- LiveDataUi:			interface : set(ViewModelsManager)
++		
++		- ViewModel:			interface extends LiveDataUi, ActionCommandUi
++			- execute action()
++			- provider Executor
++	- ViewModelImpl: implement ViewModel
++		- ViewModelsManagerImpl:
++		- ExecutorImpl: implement Executor
++			- val Repository / provider Repository
++			- val LiveData:	
++			- execute():		set LiveData
++		- FlowImpl:	
++		- ActionCommandUiImpl:	onAction() -> Executor call execute() -> set LiveData
++		- LiveDataUiImpl:		implement LiveDataUi: set(ViewModelsManager) -> get Executor -> provider Executor -> get LiveData
++		- Module:				provider Executor
++		
++		- ViewModelImpl:		implement ViewModel -> provider Executor, 
++		
++3. App
++	- ViewModel
++
++////////////////////////
++
+ 4. App Architecture
+ 	- 4.1. Overview
+ 	- 4.2. Modularization
+@@ -5,4 +111,6 @@
+ 	- 4.4. App entry points
+ 	- 4.5. App Naigation
+ 	- 4.6. Dependencies Injection
+-	- 4.7. App Startup
+\ No newline at end of file
++	- 4.7. App Startup
++	
++	
+\ No newline at end of file
