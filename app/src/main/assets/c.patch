@@ -1,0 +1,26 @@
+Subject: [PATCH] add doc for app architect
+---
+Index: app/src/main/assets/JetpackCompose.txt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/assets/JetpackCompose.txt b/app/src/main/assets/JetpackCompose.txt
+--- a/app/src/main/assets/JetpackCompose.txt	(revision f8ba6b5f84b1b3894b29df3c7b8904048a9dae0a)
++++ b/app/src/main/assets/JetpackCompose.txt	(date 1731581962154)
+@@ -104,7 +104,8 @@
+ 		- reset Effect:
+ 			+ LaunchedEffect, DisposableEffect, produceState: keys changed -> reset
+ 			+ if some key changed but state not changed: 	using rememberUpdatedState for key
+-			
++		
++		
+ 	2.3. Phases:
+ 		- Android View:		data -> 				measure -> 	layout -> 						drawing -> 			UI
+ 		- Compose:			data -> composition -> 				layout (measure + location) -> 	drawing (Canvas) -> UI							
+@@ -124,6 +125,7 @@
+ 			+ Draw:				Canvas(modifier = modifier) { }, Modifier.drawBehind vĂ  Modifier.drawWithContent
+ 			
+ 			+ Optimize:			
++			
+ 	
